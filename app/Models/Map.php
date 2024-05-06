@@ -17,4 +17,20 @@ class Map extends Model
         'status',
         'public_url',
     ];
+
+    /**
+     * Get the owner of the map.
+     */
+    public function owner()
+    {
+        return $this->belongsTo(User::class, 'owner_id');
+    }
+
+    /**
+     * Get the beacons for the map.
+     */
+    public function beacons()
+    {
+        return $this->hasMany(Beacon::class, 'map_id');
+    }
 }

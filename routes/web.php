@@ -30,7 +30,8 @@ Route::post('/register', 'App\Http\Controllers\UserController@store')->name('reg
 // Routes requiring authentication
 Route::middleware(['auth'])->group(function () {
     Route::get('/logout', 'App\Http\Controllers\UserController@logout')->name('logout');
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', 'App\Http\Controllers\UserController@dashboard')->name('dashboard');
+    Route::get('/dashboard/maps/{map}', 'App\Http\Controllers\MapController@edit')->name('map.edit');
+    Route::post('/dashboard/maps/{map}', 'App\Http\Controllers\MapController@update')->name('map.update');
+    Route::get('/dashboard/maps/{map}/base-image.png', 'App\Http\Controllers\MapController@baseImage')->name('map.base-image');
 });

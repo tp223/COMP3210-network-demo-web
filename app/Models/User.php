@@ -42,4 +42,20 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    /**
+     * Get the maps for the user.
+     */
+    public function maps()
+    {
+        return $this->hasMany(Map::class, 'owner_id');
+    }
+
+    /**
+     * Get the beacons for the user.
+     */
+    public function beacons()
+    {
+        return $this->hasMany(Beacon::class, 'owner_id');
+    }
 }

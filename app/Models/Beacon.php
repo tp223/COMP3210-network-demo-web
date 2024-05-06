@@ -19,4 +19,20 @@ class Beacon extends Model
         'owner_id',
         'status',
     ];
+
+    /**
+     * Get the owner of the beacon.
+     */
+    public function owner()
+    {
+        return $this->belongsTo(User::class, 'owner_id');
+    }
+
+    /**
+     * Get the map attached to the beacon.
+     */
+    public function map()
+    {
+        return $this->belongsTo(Map::class, 'map_id');
+    }
 }

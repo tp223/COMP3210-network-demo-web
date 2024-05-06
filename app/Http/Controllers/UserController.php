@@ -17,6 +17,24 @@ class UserController extends Controller
     }
 
     /**
+     * Display the user dashboard.
+     */
+    public function dashboard()
+    {
+        // Get the authenticated user
+        $user = auth()->user();
+
+        // Get the user's maps
+        $maps = $user->maps;
+
+        // Get the user's beacons
+        $beacons = $user->beacons;
+
+        // Return the dashboard view
+        return view('dashboard', compact('user', 'maps', 'beacons'));
+    }
+
+    /**
      * Show the form for creating a new resource.
      */
     public function create()

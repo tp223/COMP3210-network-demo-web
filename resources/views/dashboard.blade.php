@@ -19,7 +19,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                        
+                        @foreach($maps as $map)
+                            <tr onclick="window.location='{{ route('map.edit', ['map' => $map->id]) }}'" role="button">
+                                <td>{{ $map->id }}</td>
+                                <td>{{ $map->name }}</td>
+                            </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>
