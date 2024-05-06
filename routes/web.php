@@ -33,6 +33,8 @@ Route::get('/map/{key}', 'App\Http\Controllers\MapController@show')->name('map.s
 Route::middleware(['auth'])->group(function () {
     Route::get('/logout', 'App\Http\Controllers\UserController@logout')->name('logout');
     Route::get('/dashboard', 'App\Http\Controllers\UserController@dashboard')->name('dashboard');
+
+    // Routes to add and configure a map
     Route::get('/dashboard/maps/add', 'App\Http\Controllers\MapController@create')->name('map.create');
     Route::post('/dashboard/maps/add', 'App\Http\Controllers\MapController@store')->name('map.store');
     Route::get('/dashboard/maps/{map}', 'App\Http\Controllers\MapController@edit')->name('map.edit');
@@ -42,4 +44,12 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/dashboard/maps/{map}/beacons', 'App\Http\Controllers\MapController@updateBeacon')->name('map.beacon.update');
     Route::delete('/dashboard/maps/{map}/beacons', 'App\Http\Controllers\BeaconController@removeBeacon')->name('map.beacon.destroy');
     Route::get('/dashboard/maps/{map}/base-image.png', 'App\Http\Controllers\MapController@baseImage')->name('map.base-image');
+
+    // Routes to add and configure a beacon
+    Route::get('/dashboard/beacons', 'App\Http\Controllers\BeaconController@index')->name('beacon.index');
+    Route::get('/dashboard/beacons/add/{setup_key}', 'App\Http\Controllers\BeaconController@create')->name('beacon.create');
+    Route::put('/dashboard/beacons/add/{setup_key}', 'App\Http\Controllers\BeaconController@store')->name('beacon.store');
+    Route::get('/dashboard/beacons/edit/{beacon_id}', 'App\Http\Controllers\BeaconController@edit')->name('beacon.edit');
+    //Route::put('/dashboard/beacons/edit/{beacon}', 'App\Http\Controllers\BeaconController@update')->name('beacon.update');
+    //Route::delete('/dashboard/beacons/edit/{beacon}', 'App\Http\Controllers\BeaconController@destroy')->name('beacon.destroy');
 });

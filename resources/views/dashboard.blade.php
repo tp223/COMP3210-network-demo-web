@@ -7,6 +7,30 @@
         <x-navbar/>
         <div class="container">
             <h1>Welcome back {{ Auth::user()->name }}!</h1>
+            @if (session('status'))
+                <div class="alert alert-success" role="alert">
+                    {{ session('status') }}
+                </div>
+            @endif
+
+            @if (session('error'))
+                <div class="alert alert-danger" role="alert">
+                    {{ session('error') }}
+                </div>
+            @endif
+
+            @if (session('warning'))
+                <div class="alert alert-warning" role="alert">
+                    {{ session('warning') }}
+                </div>
+            @endif
+
+            @if (session('success'))
+                <div class="alert alert-success" role="alert">
+                    {{ session('success') }}
+                </div>
+            @endif
+
             <h3>Your Maps</h3>
             <p>Maps are used to display your location. You can create, edit, or delete maps here.</p>
             <a href="{{ route('map.create') }}">Add Map</a>
@@ -25,6 +49,11 @@
                                 <td>{{ $map->name }}</td>
                             </tr>
                         @endforeach
+                        @if(count($maps) == 0)
+                            <tr>
+                                <td colspan="2">No maps found.</td>
+                            </tr>
+                        @endif
                     </tbody>
                 </table>
             </div>
@@ -42,7 +71,25 @@
                         </tr>
                     </thead>
                     <tbody>
-                        
+                        @foreach($beacons as $beacon)
+                            <tr onclick="window.location='{{ route('beacon.edit', ['beacon_id' => $beacon->id]) }}'" role="button">
+                                <td>{{ $beacon->id }}</td>
+                                <td>{{ $beacon->name }}</td>
+                                <td>
+                                    @if($beacon->map)
+                                        {{ $beacon->map->name }}
+                                    @else
+                                        None
+                                    @endif
+                                </td>
+                                <td>{{ $beacon->status }}</td>
+                            </tr>
+                        @endforeach
+                        @if(count($beacons) == 0)
+                            <tr>
+                                <td colspan="4">No beacons found.</td>
+                            </tr>
+                        @endif
                     </tbody>
                 </table>
             </div>
