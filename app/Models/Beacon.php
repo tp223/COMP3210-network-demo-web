@@ -18,6 +18,8 @@ class Beacon extends Model
         'api_key',
         'owner_id',
         'status',
+        'bt_address',
+        'last_heartbeat',
     ];
 
     /**

@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::post('beacon/register', 'App\Http\Controllers\BeaconSetupController@register')->name('beacon.register');
+Route::get('beacon/poll-setup', 'App\Http\Controllers\BeaconSetupController@pollSetup')->name('beacon.poll-setup');
+
+Route::get('beacon/get-config', 'App\Http\Controllers\BeaconController@getConfig')->name('beacon.get-config');
+Route::get('beacon/heartbeat', 'App\Http\Controllers\BeaconController@heartbeat')->name('beacon.heartbeat');

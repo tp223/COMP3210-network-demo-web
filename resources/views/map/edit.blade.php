@@ -16,31 +16,52 @@
                     <script src="{{ asset('js/edit-map.js') }}"></script>
                 </div>
                 <div class="col-md-6">
-                    <form method="POST" action="{{ route('map.update', ['map' => $map->id]) }}">
+                    <form method="POST" action="{{ route('map.update', ['map' => $map->id]) }}" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
+
                         <div class="form-group">
                             <label for="name">Name</label>
                             <input type="text" class="form-control" id="name" name="name" value="{{ $map->name }}" required>
                         </div>
+
+                        @error('name')
+                            <div class="alert alert-danger mt-3">{{ $message }}</div>
+                        @enderror
 
                         <div class="form-group mt-3">
                             <label for="description">Description</label>
                             <textarea class="form-control" id="description" name="description" rows="3">{{ $map->description }}</textarea>
                         </div>
 
-                        <div class="form-group mt-3">
-                            <label for="mapImage">Map Image</label>
-                            <input type="file" class="form-control" id="mapImage" name="mapImage">
-                        </div>
+                        @error('description')
+                            <div class="alert alert-danger mt-3">{{ $message }}</div>
+                        @enderror
 
                         <div class="form-group mt-3">
-                            <label for="published">Published</label>
-                            <select class="form-control" id="published" name="published" required>
-                                <option value="0" @if($map->status == "hidden") selected @endif>No</option>
-                                <option value="1" @if($map->status == "published") selected @endif>Yes</option>
+                            <label for="map_base_image">Map Image</label>
+                            <input type="file" class="form-control" id="map_base_image" name="map_base_image">
+                        </div>
+
+                        @error('map_base_image')
+                            <div class="alert alert-danger mt-3">{{ $message }}</div>
+                        @enderror
+
+                        <div class="form-group mt-3">
+                            <label for="status">Published</label>
+                            <select class="form-control" id="status" name="status" required>
+                                <option value="hidden" @if($map->status == "hidden") selected @endif>No</option>
+                                <option value="published" @if($map->status == "published") selected @endif>Yes</option>
                             </select>
                         </div>
+
+                        @if ($map->status == 'published')
+                            <p><small>Public URL: <a href="{{ route('map.show', ['key' => $map->public_url]) }}">{{ route('map.show', ['key' => $map->public_url]) }}</a></small></p>
+                        @endif
+
+                        @error('status')
+                            <div class="alert alert-danger mt-3">{{ $message }}</div>
+                        @enderror
 
                         <button type="submit" class="btn btn-primary mt-3">Save</button>
                     </form>
@@ -67,8 +88,47 @@
                             </tbody>
                         </table>
 
-                        <a href="#" class="btn btn-primary">Connect Beacon</a>
+                        <form method="POST" action="{{ route('map.beacon.store', ['map' => $map->id]) }}" class="mt-3">
+                            @csrf
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <select class="form-select" id="inputGroupSelect04" aria-label="Example select with button addon">
+                                        <option selected>Choose...</option>
+                                        @foreach($beacons as $beacon)
+                                            <option value="{{ $beacon->id }}">{{ $beacon->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    <button class="btn btn-outline-secondary" type="button">Connect Beacon</button>
+                                </div>
+                            </div>
+
+                            @error('beacon_id')
+                                <div class="alert alert-danger mt-3">{{ $message }}</div>
+                            @enderror
+                        </form>
                     </div>
+
+                    <form method="POST" action="{{ route('map.destroy', ['map' => $map->id]) }}" class="mt-3">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger" id="delete-map-btn">Delete Map</button>
+                    </form>
+
+                    @error('confirm')
+                        <div class="alert alert-danger mt-3">{{ $message }}</div>
+                    @enderror
+
+                    <script>
+                        document.querySelector('#delete-map-btn').addEventListener('click', function(e) {
+                            e.preventDefault();
+                            if (confirm('Are you sure you want to delete this map?')) {
+                                this.closest('form').submit();
+                            }
+                        });
+                    </script>
+
+                </div>
+            </div>
         <x-footer/>
     </body>
 </html>

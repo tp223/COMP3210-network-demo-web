@@ -9,7 +9,7 @@
             <h1>Welcome back {{ Auth::user()->name }}!</h1>
             <h3>Your Maps</h3>
             <p>Maps are used to display your location. You can create, edit, or delete maps here.</p>
-            <a href="#">Create a new map</a>
+            <a href="{{ route('map.create') }}">Add Map</a>
             <div class="table-responsive small">
                 <table class="table table-striped table-sm">
                     <thead>

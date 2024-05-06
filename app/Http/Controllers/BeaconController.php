@@ -8,58 +8,49 @@ use Illuminate\Http\Request;
 class BeaconController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Get the configuration of the beacon.
      */
-    public function index()
+    public function getConfig(Request $request)
     {
-        //
+        // Get the bearer token
+        $bearerToken = $request->bearerToken();
+
+        // Find the beacon using the bearer token
+        $beacon = Beacon::where('api_key', $bearerToken)->first();
+
+        // Check if the beacon exists
+        if (!$beacon) {
+            return response()->json(['status' => 'error', 'message' => 'Beacon not found']);
+        }
+
+        // Hide the api key
+        $beacon->api_key = null;
+
+        // Return the beacon configuration
+        return response()->json($beacon);
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Heartbeat the beacon.
      */
-    public function create()
+    public function heartbeat(Request $request)
     {
-        //
-    }
+        // Get the bearer token
+        $bearerToken = $request->bearerToken();
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        // Find the beacon using the bearer token
+        $beacon = Beacon::where('api_key', $bearerToken)->first();
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Beacon $beacon)
-    {
-        //
-    }
+        // Check if the beacon exists
+        if (!$beacon) {
+            return response()->json(['status' => 'error', 'message' => 'Beacon not found']);
+        }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Beacon $beacon)
-    {
-        //
-    }
+        // Update the last heartbeat
+        $beacon->last_heartbeat = now();
+        $beacon->save();
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Beacon $beacon)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Beacon $beacon)
-    {
-        //
+        // Return success
+        return response()->json(['status' => 'success']);
     }
 }
