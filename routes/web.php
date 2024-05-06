@@ -14,5 +14,23 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('index');
+})->name('index');
+
+Route::get('/login', function () {
+    return view('login');
+})->name('login');
+Route::post('/login', 'App\Http\Controllers\UserController@authenticate')->name('login.authenticate');
+
+Route::get('/register', function () {
+    return view('register');
+})->name('register');
+Route::post('/register', 'App\Http\Controllers\UserController@store')->name('register.store');
+
+// Routes requiring authentication
+Route::middleware(['auth'])->group(function () {
+    Route::get('/logout', 'App\Http\Controllers\UserController@logout')->name('logout');
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
 });
