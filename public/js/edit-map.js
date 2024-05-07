@@ -26,6 +26,8 @@ fetch(imageUrl).then(function (response) {
         map.fitBounds(bounds);
         // Allow greater zoom
         map.setMinZoom(-10);
+        // Determine zoom level to show the whole map
+        map.setZoom(map.getBoundsZoom(bounds, false));
     };
 });
 
