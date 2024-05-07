@@ -76,8 +76,24 @@ function logToBrowser(message) {
     log.innerHTML += message + '<br>';
 }
 
-var lastUpdated = 0;
 var currentBeacon = null;
+
+function updateZoom() {
+    var highestRssi = -1000;
+    var highestRssiBeacon = null;
+    for (var key in beacons) {
+        if (beacons[key].rssi > highestRssi) {
+            highestRssi = beacons[key].rssi;
+            highestRssiBeacon = beacons[key];
+        }
+    }
+    if (highestRssiBeacon && highestRssiBeacon.id != currentBeacon) {
+        logToBrowser('Zooming to beacon with highest rssi: ' + highestRssiBeacon.beacon.name);
+        // Update current beacon in view
+        document.getElementById('current-beacon').innerHTML = highestRssiBeacon.beacon.name;
+        map.setView(highestRssiBeacon.marker.getLatLng(), 10);
+    }
+}
 
 async function startBluetoothScanner() {
     if (!isWebBluetoothEnabled()) {
@@ -99,30 +115,10 @@ async function startBluetoothScanner() {
                 if (beacons[key].btAddr == event.device.name) {
                     beacons[key].rssi = event.rssi;
                     logToBrowser('Found beacon: ' + beacons[key].btAddr + ' with rssi: ' + event.rssi + ' dBm');
-                    lastUpdated = Date.now();
+                    updateZoom();
                     break;
                 }
             }
         }
     });
 }
-
-// Every second check for beacon with highest rssi and zoom to it
-setInterval(function () {
-    if (Date.now() - lastUpdated < 2000) {
-        var highestRssi = -1000;
-        var highestRssiBeacon = null;
-        for (var key in beacons) {
-            if (beacons[key].rssi > highestRssi) {
-                highestRssi = beacons[key].rssi;
-                highestRssiBeacon = beacons[key];
-            }
-        }
-        if (highestRssiBeacon && highestRssiBeacon.id != currentBeacon) {
-            logToBrowser('Zooming to beacon with highest rssi: ' + highestRssiBeacon.beacon.name);
-            // Update current beacon in view
-            document.getElementById('current-beacon').innerHTML = highestRssiBeacon.beacon.name;
-            map.setView(highestRssiBeacon.marker.getLatLng(), 10);
-        }
-    }
-}, 1000);
