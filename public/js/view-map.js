@@ -79,6 +79,7 @@ function logToBrowser(message) {
 var currentBeacon = null;
 
 function updateZoom() {
+    logToBrowser('Updating zoom');
     var highestRssi = -1000;
     var highestRssiBeacon = null;
     for (var key in beacons) {
