@@ -68,6 +68,7 @@
                             <th scope="col">Name</th>
                             <th scope="col">Map</th>
                             <th scope="col">Status</th>
+                            <th scope="col">BLE Address</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -83,6 +84,13 @@
                                     @endif
                                 </td>
                                 <td>{{ $beacon->status }}</td>
+                                <td>
+                                    @if($beacon->bt_address)
+                                        {{ $beacon->bt_address }}
+                                    @else
+                                        None
+                                    @endif
+                                </td>
                             </tr>
                         @endforeach
                         @if(count($beacons) == 0)

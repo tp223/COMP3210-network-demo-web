@@ -6,6 +6,7 @@ use App\Models\Beacon;
 use Illuminate\Http\Request;
 use App\Models\BeaconSetup;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class BeaconController extends Controller
 {
@@ -210,5 +211,41 @@ class BeaconController extends Controller
 
         // Redirect to the dashboard with a success message
         return redirect()->route('dashboard')->with('success', 'Beacon deleted successfully');
+    }
+
+    /**
+     * API route to send the BLE name of the beacon.
+     */
+    public function sendName(Request $request)
+    {
+        // Get the bearer token
+        $bearerToken = $request->bearerToken();
+
+        // Find the beacon using the bearer token
+        $beacon = Beacon::where('api_key', $bearerToken)->first();
+
+        // Check if the beacon exists
+        if (!$beacon) {
+            return response()->json(['status' => 'error', 'message' => 'Beacon not found']);
+        }
+
+        // Validate the request
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'mac' => 'required|string|max:255',
+        ]);
+
+        // Check if validation fails
+        if ($validator->fails()) {
+            return response()->json(['status' => 'error', 'message' => 'Invalid request']);
+        }
+
+        // Update the beacon name
+        $beacon->bt_address = $request->name;
+        $beacon->save();
+
+        // Return success
+        return response()->json(['status' => 'success']);
+
     }
 }
