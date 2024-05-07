@@ -95,7 +95,7 @@
                         @endforeach
                         @if(count($beacons) == 0)
                             <tr>
-                                <td colspan="4">No beacons found.</td>
+                                <td colspan="5">No beacons found.</td>
                             </tr>
                         @endif
                     </tbody>
