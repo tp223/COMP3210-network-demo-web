@@ -85,16 +85,21 @@ function updateZoom() {
     for (var key in beacons) {
         // Convert rssi to a number
         beacons[key].rssi = parseInt(beacons[key].rssi);
+        logToBrowser('Beacon: ' + beacons[key].beacon.name + ' rssi: ' + beacons[key].rssi);
+        logToBrowser('Current beacon: ' + currentBeacon);
+        logToBrowser('Highest rssi: ' + highestRssi);
         if (beacons[key].rssi > highestRssi) {
+            LogToBrowser('New highest rssi: ' + beacons[key].rssi);
             highestRssi = beacons[key].rssi;
             highestRssiBeacon = beacons[key];
         }
     }
-    if (highestRssiBeacon && highestRssiBeacon.id != currentBeacon) {
+    if (highestRssiBeacon && highestRssiBeacon.btAddr != currentBeacon.btAddr) {
         logToBrowser('Zooming to beacon with highest rssi: ' + highestRssiBeacon.beacon.name);
         // Update current beacon in view
         document.getElementById('current-beacon').innerHTML = highestRssiBeacon.beacon.name;
         map.setView(highestRssiBeacon.marker.getLatLng(), 10);
+        currentBeacon = highestRssiBeacon;
     }
 }
 
