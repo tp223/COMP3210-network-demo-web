@@ -17,12 +17,11 @@
                     <div class="modal-body">
                         <p>
                             Bluetooth is required to use this application. Please enable Bluetooth and refresh the page.<br>
-                            As this is an experimental feature, you may need to enable the Web Platform flag in Chrome by going to <a href="chrome://flags/#enable-experimental-web-platform-features">chrome://flags/#enable-experimental-web-platform-features</a>.
+                            As this is an experimental feature, you may need to enable the Web Platform flag in Chrome by going to <a href="">chrome://flags/#enable-experimental-web-platform-features</a>.
                         </p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <a href="chrome://flags/#enable-experimental-web-platform-features" class="btn btn-primary">Set Chrome Flags</a>
                     </div>
                 </div>
             </div>
