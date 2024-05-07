@@ -120,6 +120,8 @@ setInterval(function () {
         }
         if (highestRssiBeacon && highestRssiBeacon.id != currentBeacon) {
             logToBrowser('Zooming to beacon with highest rssi: ' + highestRssiBeacon.beacon.name);
+            // Update current beacon in view
+            document.getElementById('current-beacon').innerHTML = highestRssiBeacon.beacon.name;
             map.setView(highestRssiBeacon.marker.getLatLng(), 10);
         }
     }

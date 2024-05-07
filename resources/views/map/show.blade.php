@@ -31,6 +31,8 @@
             <h1>{{ $map->name }}</h1>
             <p>{{ $map->description }}</p>
             <p><small>Created by {{ $map->owner->name }}</small></p>
+            <p><small>Created at {{ $map->created_at }}</small></p>
+            <p><small>Current Beacon: <span id="current-beacon"></span></small></p>
             <div class="row">
                 <div class="col-md-12">
                     <div class="view-map" id="view-map" data-map="{{ $map->public_url }}"></div>
