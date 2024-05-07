@@ -84,10 +84,11 @@ function updateZoom() {
     var highestRssiBeacon = null;
     for (var key in beacons) {
         // Convert rssi to a number
-        beacons[key].rssi = parseInt(beacons[key].rssi);
         logToBrowser('Beacon: ' + beacons[key].beacon.name + ' rssi: ' + beacons[key].rssi);
         logToBrowser('Current beacon: ' + currentBeacon);
         logToBrowser('Highest rssi: ' + highestRssi);
+        // Convert string to number that can be negative
+        beacons[key].rssi = Number(beacons[key].rssi);
         if (beacons[key].rssi > highestRssi) {
             LogToBrowser('New highest rssi: ' + beacons[key].rssi);
             highestRssi = beacons[key].rssi;
