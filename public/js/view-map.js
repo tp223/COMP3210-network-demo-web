@@ -1,6 +1,3 @@
-// Import Bootstrap
-import 'bootstrap';
-
 var map = L.map('view-map', {
     crs: L.CRS.Simple
 });
