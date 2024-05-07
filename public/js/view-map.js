@@ -94,13 +94,14 @@ function updateZoom() {
             highestRssiBeacon = beacons[key];
         }
     }
-    if (highestRssiBeacon && highestRssiBeacon.btAddr != currentBeacon.btAddr) {
+    if (highestRssiBeacon && (!currentBeacon || (highestRssiBeacon.btAddr != currentBeacon.btAddr))) {
         logToBrowser('Zooming to beacon with highest rssi: ' + highestRssiBeacon.beacon.name);
         // Update current beacon in view
         document.getElementById('current-beacon').innerHTML = highestRssiBeacon.beacon.name;
         map.setView(highestRssiBeacon.marker.getLatLng(), 10);
         currentBeacon = highestRssiBeacon;
     }
+    logToBrowser('Finished updating zoom');
 }
 
 async function startBluetoothScanner() {
