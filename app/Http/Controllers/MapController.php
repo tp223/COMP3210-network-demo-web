@@ -48,6 +48,9 @@ class MapController extends Controller
             $url_key = substr(str_shuffle('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'), 0, 15);
         }
 
+        // Create the map
+        $map = new Map();
+
         // Store the image in the storage
         // $map->map_base_image = $request->file('map_base_image')->store('maps');
         // Check if the request has a file
@@ -61,8 +64,6 @@ class MapController extends Controller
             $map->map_base_image = 'maps/map_' . $map->id . '.png';
         }
 
-        // Create the map
-        $map = new Map();
         $map->name = $request->name;
         $map->description = $request->description;
         $map->status = $request->status;

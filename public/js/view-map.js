@@ -1,3 +1,5 @@
+import * as bootstrap from 'bootstrap';
+
 var map = L.map('view-map', {
     crs: L.CRS.Simple
 });
@@ -54,3 +56,27 @@ fetch('/map/' + mapKey + '/beacons').then(function (response) {
         };
     });
 });
+
+// Bluetooth Options
+options = {
+    acceptAllAdvertisements: true,
+}
+
+// Create a new instance of the Bluetooth object
+var scan_started = false;
+try {
+    const scan = await navigator.bluetooth.requestLEScan(options);
+    console.log('Scan started with:');
+    console.log(' acceptAllAdvertisements: ' + scan.acceptAllAdvertisements);
+    scan_started = true;
+} catch (error) {
+    console.error('Unable to start Bluetooth scan: ' + error);
+    // Get the bootstrap error modal
+    var errorModal = new bootstrap.Modal(document.getElementById('btSetupModal'));
+    // Show the error modal
+    errorModal.show();
+}
+
+if (scan_started) {
+
+}

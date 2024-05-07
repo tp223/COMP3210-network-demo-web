@@ -6,6 +6,27 @@
         <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     </head>
     <body class="antialiased">
+        <!-- Modal showing error when bluetooth fails to start -->
+        <div class="modal fade" id="btSetupModal" tabindex="-1" aria-labelledby="btSetupModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="btSetupModalLabel">Bluetooth Unavailable</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            Bluetooth is required to use this application. Please enable Bluetooth and refresh the page.<br>
+                            As this is an experimental feature, you may need to enable the Web Platform flag in Chrome by going to <a href="chrome://flags/#enable-experimental-web-platform-features">chrome://flags/#enable-experimental-web-platform-features</a>.
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <a href="chrome://flags/#enable-experimental-web-platform-features" class="btn btn-primary">Set Chrome Flags</a>
+                    </div>
+                </div>
+            </div>
+        </div>
         <x-navbar/>
         <div class="container">
             <h1>{{ $map->name }}</h1>
