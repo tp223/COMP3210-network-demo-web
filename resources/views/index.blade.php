@@ -9,7 +9,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <h1>Welcome!</h1>
-                    <p>Please login or register to continue. Alternatively, request a map link from an existing user...</p>
+                    <p>Please login or register to continue.</p>
                 </div>
             </div>
         <x-footer/>
