@@ -46,7 +46,7 @@ class BeaconSetupController extends Controller
             // Attempt to save the beacon setup
             $beaconSetup->save();
         } catch (\Exception $e) {
-            return response()->json(['status' => 'error', 'message' => 'Failed to save beacon setup - new token required']);
+            return response()->json(['status' => 'error', 'message' => 'Failed to save beacon setup - new token required', 'user_key' => $request->user_key, 'serial_number' => $request->serial_number, 'api_key' => $bearerToken]);
         }
 
         // Return the beacon setup
