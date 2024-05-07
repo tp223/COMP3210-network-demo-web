@@ -87,8 +87,8 @@ class UserController extends Controller
                 // Authenticate the user
                 auth()->login($user);
 
-                // Redirect to the home page
-                return redirect()->route('dashboard');
+                // Redirect to intended page
+                return redirect()->intended(route('dashboard'));
             }
         }
 

@@ -56,6 +56,7 @@ Route::middleware(['auth'])->group(function () {
     // Routes to add and configure a beacon
     Route::get('/dashboard/beacons', 'App\Http\Controllers\BeaconController@index')->name('beacon.index');
     Route::get('/dashboard/beacons/add/{setup_key}', 'App\Http\Controllers\BeaconController@create')->name('beacon.create');
+    Route::get('/dashboard/beacons/add/{setup_key}/connection', 'App\Http\Controllers\BeaconController@createTest')->name('beacon.create.test');
     Route::put('/dashboard/beacons/add/{setup_key}', 'App\Http\Controllers\BeaconController@store')->name('beacon.store');
     Route::get('/dashboard/beacons/edit/{beacon_id}', 'App\Http\Controllers\BeaconController@edit')->name('beacon.edit');
     Route::put('/dashboard/beacons/edit/{beacon_id}', 'App\Http\Controllers\BeaconController@update')->name('beacon.update');

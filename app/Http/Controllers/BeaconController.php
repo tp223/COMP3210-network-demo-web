@@ -31,8 +31,8 @@ class BeaconController extends Controller
 
         // Check if the beacon setup exists
         if (!$beaconSetup) {
-            // Redirect to the dashboard with an error message
-            return redirect()->route('dashboard')->with('error', 'Beacon setup not found. Please try again in a few moments...');
+            // Redirect to the waiting page
+            return view('beacon.waiting', ['setupKey' => $setupKey]);   
         }
 
         // Check if the beacon setup is already used
@@ -44,6 +44,30 @@ class BeaconController extends Controller
 
         // Return the beacon setup
         return view('beacon.create', ['beaconSetup' => $beaconSetup]);   
+    }
+
+    /**
+     * JSON endpoint to check if the beacon has connected.
+     */
+    public function createTest(Request $request, $setupKey)
+    {
+        // Find the beacon setup using the setup key
+        $beaconSetup = BeaconSetup::where('user_key', $setupKey)->first();
+
+        // Check if the beacon setup exists
+        if (!$beaconSetup) {
+            return response()->json(['status' => 'not-connected', 'message' => 'Beacon setup not found']);
+        }
+
+        // Check if the beacon setup is already used
+        $beacon = Beacon::where('api_key', $beaconSetup->api_key)->first();
+        if ($beacon || $beaconSetup->status == 'complete') {
+            return response()->json(['status' => 'configured', 'message' => 'Beacon setup already used']);
+        } else if ($beaconSetup) {
+            return response()->json(['status' => 'setup-pending', 'message' => 'Beacon setup pending...']);
+        } else {
+            return response()->json(['status' => 'not-connected', 'message' => 'Beacon setup not found']);
+        }
     }
 
     /**

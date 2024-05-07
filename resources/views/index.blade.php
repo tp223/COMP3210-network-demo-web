@@ -8,7 +8,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <h1 class="text-center">Welcome!</h1>
+                    <h1>Welcome!</h1>
                     <p>Please login or register to continue. Alternatively, request a map link from an existing user...</p>
                 </div>
             </div>
