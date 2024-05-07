@@ -79,18 +79,12 @@ function logToBrowser(message) {
 var currentBeacon = null;
 
 function updateZoom() {
-    logToBrowser('Updating zoom');
     var highestRssi = -1000;
     var highestRssiBeacon = null;
     for (var key in beacons) {
-        // Convert rssi to a number
-        logToBrowser('Beacon: ' + beacons[key].beacon.name + ' rssi: ' + beacons[key].rssi);
-        logToBrowser('Current beacon: ' + currentBeacon);
-        logToBrowser('Highest rssi: ' + highestRssi);
         // Convert string to number that can be negative
         beacons[key].rssi = Number(beacons[key].rssi);
         if (beacons[key].rssi > highestRssi) {
-            logToBrowser('New highest rssi: ' + beacons[key].rssi);
             highestRssi = beacons[key].rssi;
             highestRssiBeacon = beacons[key];
         }
@@ -99,10 +93,11 @@ function updateZoom() {
         logToBrowser('Zooming to beacon with highest rssi: ' + highestRssiBeacon.beacon.name);
         // Update current beacon in view
         document.getElementById('current-beacon').innerHTML = highestRssiBeacon.beacon.name;
-        map.setView(highestRssiBeacon.marker.getLatLng(), 10);
+        map.setView(highestRssiBeacon.marker.getLatLng());
+        // Show the beacon popup
+        highestRssiBeacon.marker.openPopup();
         currentBeacon = highestRssiBeacon;
     }
-    logToBrowser('Finished updating zoom');
 }
 
 async function startBluetoothScanner() {
