@@ -13,7 +13,6 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="edit-map" id="edit-map" data-map="{{ $map->id }}"></div>
-                    <script src="{{ asset('js/edit-map.js') }}"></script>
                 </div>
                 <div class="col-md-6">
                     <form method="POST" action="{{ route('map.update', ['map' => $map->id]) }}" enctype="multipart/form-data">
@@ -75,14 +74,26 @@
                                     <th scope="col">#</th>
                                     <th scope="col">Name</th>
                                     <th scope="col">Status</th>
+                                    <th scope="col">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($map->beacons as $beacon)
-                                    <tr id="beacon-{{ $beacon->id }}">
+                                    <tr id="beacon-{{ $beacon->id }}" class="beacon-row">
                                         <td>{{ $beacon->id }}</td>
                                         <td>{{ $beacon->name }}</td>
                                         <td>{{ $beacon->status }}</td>
+                                        <td>
+                                            <form method="POST" action="{{ route('map.beacon.destroy', ['map' => $map->id]) }}" class="mb-1">
+                                                @csrf
+                                                @method('DELETE')
+                                                <input type="hidden" name="beacon_id" value="{{ $beacon->id }}">
+                                                <button type="submit" class="btn btn-danger btn-sm">Disconnect</button>
+                                            </form>
+                                            <button class="btn btn-primary btn-sm plot-beacon-on-map-btn" data-beacon="{{ $beacon->id }}">Plot on Map</button>
+                                            <button class="btn btn-primary btn-sm reset-beacon-on-map-btn" data-beacon="{{ $beacon->id }}" disabled>Reset Position</button>
+                                            <a href="{{ route('beacon.edit', ['beacon_id' => $beacon->id]) }}" class="btn btn-primary btn-sm">Edit</a>
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -92,13 +103,13 @@
                             @csrf
                             <div class="form-group">
                                 <div class="input-group">
-                                    <select class="form-select" id="inputGroupSelect04" aria-label="Example select with button addon">
+                                    <select class="form-select" id="beacon-select" aria-label="Add beacon to map" name="beacon_id">
                                         <option selected>Choose...</option>
-                                        @foreach($beacons as $beacon)
+                                        @foreach($unassignedBeacons as $beacon)
                                             <option value="{{ $beacon->id }}">{{ $beacon->name }}</option>
                                         @endforeach
                                     </select>
-                                    <button class="btn btn-outline-secondary" type="button">Connect Beacon</button>
+                                    <button class="btn btn-outline-secondary" type="submit">Connect Beacon</button>
                                 </div>
                             </div>
 
@@ -130,5 +141,6 @@
                 </div>
             </div>
         <x-footer/>
+        <script src="{{ asset('js/edit-map.js') }}"></script>
     </body>
 </html>

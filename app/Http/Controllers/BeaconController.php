@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Beacon;
 use Illuminate\Http\Request;
 use App\Models\BeaconSetup;
+use Illuminate\Support\Facades\Auth;
 
 class BeaconController extends Controller
 {
@@ -139,5 +140,51 @@ class BeaconController extends Controller
 
         // Return the beacon edit page
         return view('beacon.edit', ['beacon' => $beacon]);
+    }
+
+    /**
+     * Update the beacon in the database.
+     */
+    public function update(Request $request, $beaconId)
+    {
+        // Find the beacon using the beacon id and the owner id
+        $beacon = Auth::user()->beacons()->where('id', $beaconId)->first();
+
+        // Validate the request
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'string|nullable|max:255',
+        ]);
+
+        // Update the beacon
+        $beacon->name = $request->name;
+        $beacon->description = $request->description;
+        $beacon->save();
+
+        // Redirect to the dashboard with a success message
+        return redirect()->route('dashboard')->with('success', 'Beacon updated successfully');
+    }
+
+    /**
+     * Delete the beacon from the database.
+     */
+    public function destroy(Request $request, $beaconId)
+    {
+        // Find the beacon using the beacon id and the owner id
+        $beacon = Auth::user()->beacons()->where('id', $beaconId)->first();
+
+        // Remove the beacon setup
+        $beaconSetup = BeaconSetup::where('api_key', $beacon->api_key)->first();
+
+        // Check if the beacon setup exists
+        if ($beaconSetup) {
+            $beaconSetup->delete();
+        }
+
+        // Delete the beacon
+        $beacon->delete();
+
+        // Redirect to the dashboard with a success message
+        return redirect()->route('dashboard')->with('success', 'Beacon deleted successfully');
     }
 }

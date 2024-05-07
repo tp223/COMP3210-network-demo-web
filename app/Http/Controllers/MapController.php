@@ -201,4 +201,150 @@ class MapController extends Controller
         // Redirect to the dashboard
         return redirect()->route('dashboard');
     }
+
+    /**
+     * Add a beacon to the map.
+     */
+    public function addBeacon(Request $request, $map)
+    {
+        // Get the map from the users maps
+        $map = Auth::user()->maps->where('id', $map)->first();
+
+        // Validate the request
+        $request->validate([
+            'beacon_id' => 'required|integer'
+        ]);
+
+        // Check if the beacon is owned by the user
+        $beacon = Auth::user()->beacons->where('id', $request->beacon_id)->first();
+
+        if (!$beacon) {
+            return redirect()->back()->withErrors(['beacon_id' => 'Beacon not found']);
+        }
+
+        // Attach the beacon to the map
+        $beacon->map_id = $map->id;
+        $beacon->save();
+
+        // Redirect back to the map edit page
+        return redirect()->route('map.edit', $map->id);
+    }
+
+    /**
+     * Remove a marker from the map.
+     */
+    public function removeBeacon(Request $request, $map)
+    {
+        // Get the map from the users maps
+        $map = Auth::user()->maps->where('id', $map)->first();
+
+        // Validate the request
+        $request->validate([
+            'beacon_id' => 'required|integer',
+        ]);
+
+        // Check if the beacon is owned by the user
+        $beacon = Auth::user()->beacons->where('id', $request->beacon_id)->first();
+
+        if (!$beacon) {
+            return redirect()->back()->withErrors(['beacon_id' => 'Beacon not found']);
+        }
+
+        // Remove the beacon from the map
+        $beacon->map_id = null;
+        $beacon->latitude = null;
+        $beacon->longitude = null;
+        $beacon->status = 'disabled';
+        $beacon->save();
+
+        // Redirect back to the map edit page
+        return redirect()->route('map.edit', $map->id);
+    }
+
+    /**
+     * Get the markers for the map.
+     */
+    public function markers(Request $request, $map)
+    {
+        // Get the map from the users maps
+        $map = Auth::user()->maps->where('id', $map)->first();
+
+        // Get all markers for the map
+        $markers = $map->beacons->map(function ($beacon) {
+            return [
+                'beacon_id' => $beacon->id,
+                'name' => $beacon->name,
+                'description' => $beacon->description,
+                'latitude' => $beacon->latitude,
+                'longitude' => $beacon->longitude,
+                'status' => $beacon->status,
+            ];
+        });
+
+        // Return markers as JSON response
+        return response()->json($markers);
+    }
+
+    /**
+     * Update the markers for the map.
+     */
+    public function updateMarker(Request $request, $map, $marker_id)
+    {
+        // Get the map from the users maps
+        $map = Auth::user()->maps->where('id', $map)->first();
+
+        // Validate the request
+        $request->validate([
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
+        ]);
+
+        // Get the beacon from the map
+        $beacon = $map->beacons->where('id', $marker_id)->first();
+
+        // Check if the beacon is owned by the user
+        if (!$beacon) {
+            return response()->json(['status' => 'error', 'message' => 'Beacon not found']);
+        }
+
+        // Update the beacon
+        $beacon->latitude = $request->latitude;
+        $beacon->longitude = $request->longitude;
+        $beacon->save();
+
+        // Return success
+        return response()->json(['status' => 'success']);
+    }
+
+    /**
+     * Add a marker to the map.
+     */
+    public function addMarker(Request $request, $map, $marker_id)
+    {
+        // Get the map from the users maps
+        $map = Auth::user()->maps->where('id', $map)->first();
+
+        // Validate the request
+        $request->validate([
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
+        ]);
+
+        // Get the beacon from the map
+        $beacon = $map->beacons->where('id', $marker_id)->first();
+
+        // Check if the beacon is owned by the user
+        if (!$beacon) {
+            return response()->json(['status' => 'error', 'message' => 'Beacon not found']);
+        }
+
+        // Update the beacon
+        $beacon->latitude = $request->latitude;
+        $beacon->longitude = $request->longitude;
+        $beacon->status = 'enabled';
+        $beacon->save();
+
+        // Return success
+        return response()->json(['status' => 'success']);
+    }
 }
