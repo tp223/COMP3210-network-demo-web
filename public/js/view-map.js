@@ -96,9 +96,9 @@ async function startBluetoothScanner() {
         if (event.device.name != null) {
             // Search for beacon where device name matches
             for (var key in beacons) {
-                if (beacons[key].beacon.name == event.device.name) {
+                if (beacons[key].btAddr == event.device.name) {
                     beacons[key].rssi = event.rssi;
-                    logToBrowser('Found beacon: ' + beacons[key].beacon.name);
+                    logToBrowser('Found beacon: ' + beacons[key].btAddr);
                     lastUpdated = Date.now();
                     break;
                 }
