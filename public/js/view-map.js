@@ -98,7 +98,7 @@ async function startBluetoothScanner() {
             for (var key in beacons) {
                 if (beacons[key].btAddr == event.device.name) {
                     beacons[key].rssi = event.rssi;
-                    logToBrowser('Found beacon: ' + beacons[key].btAddr);
+                    logToBrowser('Found beacon: ' + beacons[key].btAddr + ' with rssi: ' + event.rssi + ' dBm');
                     lastUpdated = Date.now();
                     break;
                 }
@@ -119,7 +119,7 @@ setInterval(function () {
             }
         }
         if (highestRssiBeacon && highestRssiBeacon.id != currentBeacon) {
-            console.log('Zooming to beacon with highest rssi: ' + highestRssiBeacon.beacon.name);
+            logToBrowser('Zooming to beacon with highest rssi: ' + highestRssiBeacon.beacon.name);
             map.setView(highestRssiBeacon.marker.getLatLng(), 10);
         }
     }
