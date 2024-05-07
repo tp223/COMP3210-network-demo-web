@@ -63,7 +63,7 @@ options = {
 // Create a new instance of the Bluetooth object
 var scan_started = false;
 try {
-    const scan = await navigator.bluetooth.requestLEScan(options);
+    const scan = navigator.bluetooth.requestLEScan(options);
     console.log('Scan started with:');
     console.log(' acceptAllAdvertisements: ' + scan.acceptAllAdvertisements);
     scan_started = true;
