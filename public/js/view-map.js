@@ -72,7 +72,7 @@ function isWebBluetoothEnabled() {
 
 function logToBrowser(message) {
     var log = document.getElementById('logs');
-    log.textContent += message + '\n';
+    log.textContent += message + '<br>';
 }
 
 async function startBluetoothScanner() {

@@ -36,8 +36,8 @@
                     <div class="view-map" id="view-map" data-map="{{ $map->public_url }}"></div>
                 </div>
             </div>
-            <button class="btn btn-primary mt-3" onClick="startBluetoothScanner();">Start Bluetooth</button>
-            <div class="accordion mt-3" id="accordionLog">
+            <button class="btn btn-primary mt-5" onClick="startBluetoothScanner();">Start Bluetooth</button>
+            <div class="accordion mt-3 mb-3" id="accordionLog">
                 <div class="accordion-item">
                     <h2 class="accordion-header">
                       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
