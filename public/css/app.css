@@ -3,3 +3,9 @@
     width: 100%;
     min-height: 500px;
 }
+
+.view-map {
+    height: 100%;
+    width: 100%;
+    min-height: 700px;
+}

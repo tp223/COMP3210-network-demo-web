@@ -81,9 +81,60 @@ class MapController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Map $map)
+    public function show(Map $map, $key)
     {
-        //
+        // Get the map from the public url
+        $map = Map::where('public_url', $key)->first();
+
+        // Check if the map exists
+        if (!$map) {
+            return view('map.not-found');
+        }
+
+        // Check if the map is published
+        if ($map->status != 'published') {
+            return view('map.not-found');
+        }
+
+        // Return the map view
+        return view('map.show', compact('map'));
+    }
+
+    /**
+     * Get the beacons for the map.
+     */
+    public function beacons(Map $map, $key)
+    {
+        // Get the map from the public url
+        $map = Map::where('public_url', $key)->first();
+
+        // Check if the map exists
+        if (!$map) {
+            return response()->json(['status' => 'error', 'message' => 'Map not found']);
+        }
+
+        // Check if the map is published
+        if ($map->status != 'published') {
+            return response()->json(['status' => 'error', 'message' => 'Map not found']);
+        }
+
+        // Get all beacons for the map
+        $beacons = $map->beacons->map(function ($beacon) {
+            if ($beacon->status != 'enabled') {
+                return null;
+            }
+            return [
+                'beacon_id' => $beacon->id,
+                'name' => $beacon->name,
+                'description' => $beacon->description,
+                'latitude' => $beacon->latitude,
+                'longitude' => $beacon->longitude,
+                'bt_address' => $beacon->bt_address,
+            ];
+        });
+
+        // Return beacons as JSON response
+        return response()->json($beacons);
     }
 
     /**
@@ -107,10 +158,39 @@ class MapController extends Controller
     /**
      * Get the base image for the map.
      */
-    public function baseImage(Request $request, $map)
+    public function baseImage(Request $request, $mapId)
     {
-        // Get the map from the users maps
-        $map = Auth::user()->maps->where('id', $map)->first();
+        $mapPublic = Map::where('public_url', $mapId)->first();
+        $map = null;
+        // Check if the request is authenticated
+        if (Auth::check()) {
+            // Get the map from the users maps
+            $map = Auth::user()->maps->where('id', $mapId)->first();
+        }
+
+        if (!$map && !$mapPublic) {
+            return response()->file(resource_path('images/upload-a-map.png'));
+        }
+
+        if ($mapPublic && $mapPublic->status == 'published') {
+            $map = $mapPublic;
+        }
+
+        // Check if the map exists
+        if (!$map) {
+            return response()->file(resource_path('images/upload-a-map.png'));
+        }
+
+        if ($map->public_url == $mapId) {
+            // Check if the map is published
+            if ($map->status != 'published') {
+                $response = response()->file(resource_path('images/upload-a-map.png'));
+                $response->headers->set('Cache-Control', 'no-cache, no-store, must-revalidate');
+                $response->headers->set('Pragma', 'no-cache');
+                $response->headers->set('Expires', '0');
+                return $response;
+            }
+        }
 
         // Check if the map has a base image otherwise return the default image
         if ($map->map_base_image) {

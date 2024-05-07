@@ -20,7 +20,7 @@
                 <div class="col-md-12">
                     <form method="POST" action="{{ route('beacon.update', ['beacon_id' => $beacon->id]) }}">
                         @csrf
-                        @method('POST')
+                        @method('PUT')
 
                         <div class="form-group">
                             <label for="name">Name</label>

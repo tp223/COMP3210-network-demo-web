@@ -38,12 +38,13 @@ fetch('/dashboard/maps/' + mapId + '/markers').then(function (response) {
     console.log(data);
     data.forEach(function (marker) {
         if (marker.status == "enabled") {
+            console.log("Plotting beacon " + marker.beacon_id + " on map");
             // Create a draggable marker at the beacon's location
             var markerElement = L.marker([marker.latitude, marker.longitude], { draggable: true, autoPan: true }).addTo(map).bindPopup(marker.name);
             // Add a drag event listener to the marker
             markerElement.on('dragend', function (event) {
-                var marker = event.target;
-                var position = marker.getLatLng();
+                var markerElement = event.target;
+                var position = markerElement.getLatLng();
                 // Update the marker's position
                 updateMarker(marker.beacon_id, position.lat, position.lng);
             });

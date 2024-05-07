@@ -6,7 +6,6 @@
 
         <ul class="nav nav-pills">
             <li class="nav-item"><a href="{{ route('index') }}" class="nav-link @if (Route::currentRouteName() == 'index') active @endif" aria-current="page">Home</a></li>
-            <li class="nav-item"><a href="#" class="nav-link">Maps</a></li>
             @if (Auth::check())
                 <li class="nav-item"><a href="{{ route('dashboard') }}" class="nav-link @if (Route::currentRouteName() == 'dashboard') active @endif">Dashboard</a></li>
                 <li class="nav-item"><a href="{{ route('logout') }}" class="nav-link">Logout</a></li>

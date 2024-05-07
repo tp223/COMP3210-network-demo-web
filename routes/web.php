@@ -28,6 +28,8 @@ Route::get('/register', function () {
 Route::post('/register', 'App\Http\Controllers\UserController@store')->name('register.store');
 
 Route::get('/map/{key}', 'App\Http\Controllers\MapController@show')->name('map.show');
+Route::get('/map/{key}/beacons', 'App\Http\Controllers\MapController@beacons')->name('map.beacons');
+Route::get('/map/{key}/base-image.png', 'App\Http\Controllers\MapController@baseImage')->name('map.base-image');
 
 // Routes requiring authentication
 Route::middleware(['auth'])->group(function () {
@@ -43,7 +45,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/dashboard/maps/{map}/beacons', 'App\Http\Controllers\MapController@addBeacon')->name('map.beacon.store');
     Route::put('/dashboard/maps/{map}/beacons', 'App\Http\Controllers\MapController@updateBeacon')->name('map.beacon.update');
     Route::delete('/dashboard/maps/{map}/beacons', 'App\Http\Controllers\MapController@removeBeacon')->name('map.beacon.destroy');
-    Route::get('/dashboard/maps/{map}/base-image.png', 'App\Http\Controllers\MapController@baseImage')->name('map.base-image');
+    Route::get('/dashboard/maps/{map}/base-image.png', 'App\Http\Controllers\MapController@baseImage')->name('private.map.base-image');
 
     // Leaflet routes for displaying the map
     Route::get('/dashboard/maps/{map}/markers', 'App\Http\Controllers\MapController@markers')->name('map.markers');
