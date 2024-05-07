@@ -36,6 +36,7 @@
                     <div class="view-map" id="view-map" data-map="{{ $map->public_url }}"></div>
                 </div>
             </div>
+            <button class="btn btn-primary mt-3" onClick="startBluetoothScanner();">Start Bluetooth</button>
         <x-footer/>
         <script src="{{ asset('js/view-map.js') }}"></script>
     </body>

@@ -57,26 +57,31 @@ fetch('/map/' + mapKey + '/beacons').then(function (response) {
     });
 });
 
-// Bluetooth Options
-options = {
-    acceptAllAdvertisements: true,
+function isWebBluetoothEnabled() {
+    if (navigator.bluetooth) {
+        return true;
+    } else {
+        console.error('Web Bluetooth API is not available/enabled. Please enable it in chrome://flags.');
+        // Get the bootstrap error modal
+        var errorModal = new bootstrap.Modal(document.getElementById('btSetupModal'));
+        // Show the error modal
+        errorModal.show();
+        return false;
+    }
 }
 
-// Create a new instance of the Bluetooth object
-var scan_started = false;
-try {
-    const scan = navigator.bluetooth.requestLEScan(options);
+async function startBluetoothScanner() {
+    if (!isWebBluetoothEnabled()) {
+        return;
+    }
+    
+    // Bluetooth Options
+    let options = {
+        acceptAllAdvertisements: true,
+    }
+    const scan = await navigator.bluetooth.requestLEScan(options);
     console.log('Scan started with:');
     console.log(' acceptAllAdvertisements: ' + scan.acceptAllAdvertisements);
-    scan_started = true;
-} catch (error) {
-    console.error('Unable to start Bluetooth scan: ' + error);
-    // Get the bootstrap error modal
-    var errorModal = new bootstrap.Modal(document.getElementById('btSetupModal'));
-    // Show the error modal
-    errorModal.show();
-}
 
-if (scan_started) {
-
+    
 }
