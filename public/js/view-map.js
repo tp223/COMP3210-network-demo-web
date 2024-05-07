@@ -70,18 +70,29 @@ function isWebBluetoothEnabled() {
     }
 }
 
+function logToBrowser(message) {
+    var log = document.getElementById('logs');
+    log.textContent += message + '\n';
+}
+
 async function startBluetoothScanner() {
     if (!isWebBluetoothEnabled()) {
         return;
     }
-    
+
     // Bluetooth Options
     let options = {
         acceptAllAdvertisements: true,
     }
     const scan = await navigator.bluetooth.requestLEScan(options);
-    console.log('Scan started with:');
-    console.log(' acceptAllAdvertisements: ' + scan.acceptAllAdvertisements);
-
-    
+    logToBrowser('Scan started with:');
+    logToBrowser(' acceptAllAdvertisements: ' + scan.acceptAllAdvertisements);
+    navigator.bluetooth.addEventListener('advertisementreceived', event => {
+        logToBrowser('Advertisement received.');
+        logToBrowser('  Device Name: ' + event.device.name);
+        logToBrowser('  Device ID: ' + event.device.id);
+        logToBrowser('  RSSI: ' + event.rssi);
+        logToBrowser('  TX Power: ' + event.txPower);
+        logToBrowser('  UUIDs: ' + event.uuids);
+    });
 }

@@ -37,6 +37,20 @@
                 </div>
             </div>
             <button class="btn btn-primary mt-3" onClick="startBluetoothScanner();">Start Bluetooth</button>
+            <div class="accordion mt-3" id="accordionLog">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                            Logs
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionLog">
+                        <div class="accordion-body">
+                            <span id="logs"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         <x-footer/>
         <script src="{{ asset('js/view-map.js') }}"></script>
     </body>
