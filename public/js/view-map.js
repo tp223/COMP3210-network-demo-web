@@ -83,6 +83,8 @@ function updateZoom() {
     var highestRssi = -1000;
     var highestRssiBeacon = null;
     for (var key in beacons) {
+        // Convert rssi to a number
+        beacons[key].rssi = parseInt(beacons[key].rssi);
         if (beacons[key].rssi > highestRssi) {
             highestRssi = beacons[key].rssi;
             highestRssiBeacon = beacons[key];
