@@ -92,19 +92,13 @@ async function startBluetoothScanner() {
     logToBrowser('Scan started with:');
     logToBrowser(' acceptAllAdvertisements: ' + scan.acceptAllAdvertisements);
     navigator.bluetooth.addEventListener('advertisementreceived', event => {
-        logToBrowser('Advertisement received.');
-        logToBrowser('  Device Name: ' + event.device.name);
-        logToBrowser('  Device ID: ' + event.device.id);
-        logToBrowser('  RSSI: ' + event.rssi);
-        logToBrowser('  TX Power: ' + event.txPower);
-        logToBrowser('  UUIDs: ' + event.uuids);
         // Check if the device is a beacon
         if (event.device.name != null) {
             // Search for beacon where device name matches
             for (var key in beacons) {
                 if (beacons[key].beacon.name == event.device.name) {
                     beacons[key].rssi = event.rssi;
-                    logToBrowser('  Found beacon: ' + beacons[key].beacon.name);
+                    logToBrowser('Found beacon: ' + beacons[key].beacon.name);
                     lastUpdated = Date.now();
                     break;
                 }
